@@ -2,11 +2,6 @@
 data "google_dns_managed_zone" "website_zone" {
     name = var.gcp_dns_zone
 }
-#Reserve a static IP address
-resource "google_compute_address" "external_ip" {
-  name = "cluster-ip"
-  region = var.gcp_region
-}
 #Create a VPC network
 resource "google_compute_network" "kube-network" {
   name = "${var.gcp_cluster_name}-network"
@@ -32,5 +27,5 @@ resource "google_dns_record_set" "kube-dns-record" {
   type = "A"
   ttl = 300
   managed_zone = google_dns_managed_zone.kube-dns-zone.name
-  rrdatas = [google_compute_address.external_ip.address]
+  rrdatas = [google_container_cluster.primary.endpoint]
 }

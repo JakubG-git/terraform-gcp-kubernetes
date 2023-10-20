@@ -1,5 +1,5 @@
 data "google_container_engine_versions" "gke_versions" {
-  location = var.gcp_region
+  location = var.gcp_zone 
 }
 
 resource "google_container_cluster" "primary" {
@@ -11,6 +11,8 @@ resource "google_container_cluster" "primary" {
     
     network = google_compute_network.kube-network.self_link
     subnetwork = google_compute_subnetwork.kube-subnet.self_link
+    # deletion_protection = false
+
     # Unfortunetly this field is read only
     # private_cluster_config {
     #   public_endpoint = google_compute_address.external_ip.address
